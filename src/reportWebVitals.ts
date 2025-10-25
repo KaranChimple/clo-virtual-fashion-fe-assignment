@@ -7,7 +7,7 @@ const reportWebVitals = (onPerfEntry?: ReportHandler) => {
       getFID(onPerfEntry);
       getFCP(onPerfEntry);
       getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);  // ← Changed from getTTFID to getTTFB
+      getTTFB(onPerfEntry);
     });
   }
 };
