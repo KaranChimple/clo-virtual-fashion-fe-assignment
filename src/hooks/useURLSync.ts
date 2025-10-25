@@ -1,36 +1,43 @@
+import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import queryString from 'query-string';
-import { FilterState, PricingOption, SortOption } from 'types';
+import { FilterState, PricingOption, SortOption } from '../types';
 
 export const useURLSync = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const updateURL = (filters: FilterState) => {
-    const query = queryString.stringify({
-      keyword: filters.keyword || undefined,
-      pricing: filters.pricing.length > 0 ? filters.pricing.join(',') : undefined,
-      sortBy: filters.sortBy !== SortOption.NEWEST ? filters.sortBy : undefined,
-      minPrice: filters.priceRange?.min,
-      maxPrice: filters.priceRange?.max,
-    }, { 
-      skipNull: true, 
-      skipEmptyString: true 
-    });
-    
-    navigate(`?${query}`, { replace: true });
-  };
+  const updateURL = useCallback((filters: FilterState) => {
+    const query = queryString.stringify(
+      {
+        keyword: filters.keyword || undefined,
+        pricing: filters.pricing.length > 0 ? filters.pricing.join(',') : undefined,
+        sortBy: filters.sortBy !== SortOption.NEWEST ? filters.sortBy : undefined,
+        minPrice: filters.priceRange?.min,
+        maxPrice: filters.priceRange?.max,
+      },
+      {
+        skipNull: true,
+        skipEmptyString: true,
+      }
+    );
 
-  const getFiltersFromURL = (): FilterState => {
+    const newUrl = query ? `?${query}` : location.pathname;
+    navigate(newUrl, { replace: true });
+  }, [navigate, location.pathname]);
+
+  const getFiltersFromURL = useCallback((): FilterState => {
     const parsed = queryString.parse(location.search);
-    
+
     let pricing: PricingOption[] = [];
     if (parsed.pricing && typeof parsed.pricing === 'string') {
-      pricing = parsed.pricing.split(',').filter((p): p is PricingOption => 
-        Object.values(PricingOption).includes(p as PricingOption)
-      );
+      pricing = parsed.pricing
+        .split(',')
+        .filter((p): p is PricingOption =>
+          Object.values(PricingOption).includes(p as PricingOption)
+        );
     }
-    
+
     let priceRange = undefined;
     if (parsed.minPrice && parsed.maxPrice) {
       const min = parseFloat(parsed.minPrice as string);
@@ -39,19 +46,24 @@ export const useURLSync = () => {
         priceRange = { min, max };
       }
     }
-    
+
     let sortBy = SortOption.NEWEST;
-    if (parsed.sortBy && Object.values(SortOption).includes(parsed.sortBy as SortOption)) {
+    if (
+      parsed.sortBy &&
+      Object.values(SortOption).includes(parsed.sortBy as SortOption)
+    ) {
       sortBy = parsed.sortBy as SortOption;
     }
-    
+
+    const keyword = (parsed.keyword as string) || '';
+
     return {
       pricing,
-      keyword: (parsed.keyword as string) || '',
+      keyword,
       priceRange,
       sortBy,
     };
-  };
+  }, [location.search]);
 
   return { updateURL, getFiltersFromURL };
 };
