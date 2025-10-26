@@ -1,13 +1,22 @@
 import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { StorePage } from "./pages/StorePage";
 import "./App.css";
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>CLO-SET Store</h1>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<StorePage />} />
+        <Route path="/store" element={<StorePage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
 };
 

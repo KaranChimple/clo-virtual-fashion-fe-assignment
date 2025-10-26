@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import queryString from 'query-string';
-import { FilterState, PricingOption, SortOption } from '../types';
+import { FilterState, PricingOption, SortOption } from 'types';
 
 export const useURLSync = () => {
   const location = useLocation();
@@ -12,7 +12,7 @@ export const useURLSync = () => {
       {
         keyword: filters.keyword || undefined,
         pricing: filters.pricing.length > 0 ? filters.pricing.join(',') : undefined,
-        sortBy: filters.sortBy !== SortOption.NEWEST ? filters.sortBy : undefined,
+        sortBy: filters.sortBy !== SortOption.NAME ? filters.sortBy : undefined,
         minPrice: filters.priceRange?.min,
         maxPrice: filters.priceRange?.max,
       },
@@ -33,9 +33,8 @@ export const useURLSync = () => {
     if (parsed.pricing && typeof parsed.pricing === 'string') {
       pricing = parsed.pricing
         .split(',')
-        .filter((p): p is PricingOption =>
-          Object.values(PricingOption).includes(p as PricingOption)
-        );
+        .map(p => parseInt(p, 10))
+        .filter(p => Object.values(PricingOption).includes(p as PricingOption));
     }
 
     let priceRange = undefined;
@@ -47,7 +46,7 @@ export const useURLSync = () => {
       }
     }
 
-    let sortBy = SortOption.NEWEST;
+    let sortBy = SortOption.NAME;
     if (
       parsed.sortBy &&
       Object.values(SortOption).includes(parsed.sortBy as SortOption)

@@ -1,0 +1,23 @@
+.sortDropdown {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.label {
+  font-size: 1rem;
+  color: #fff;
+  margin-right: 2px;
+}
+
+.select {
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #111;
+  color: #fff;
+  padding: 5px 14px;
+  display: flex;
+  flex-direction: row;
+}

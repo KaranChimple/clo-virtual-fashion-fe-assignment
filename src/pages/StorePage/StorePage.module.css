@@ -1,0 +1,137 @@
+.page {
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--space-24);
+  padding: var(--space-24) 0;
+  align-items: start;
+}
+
+.sidebar {
+  position: relative;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  min-height: 400px;
+}
+
+.loading_more {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-24);
+  margin-top: var(--space-24);
+}
+
+.sentinel {
+  height: 20px;
+  visibility: hidden;
+}
+
+.end_message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-32) var(--space-16);
+  text-align: center;
+}
+
+.end_message p {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.pageContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.filterCard {
+  width: 100%;
+  max-width: 1200px;
+  background: rgba(24, 24, 24, 0.95);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin: 40px 0 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.itemsCounter {
+  margin-bottom: 24px 0;
+  color: #aaa;
+  text-align: center;
+  font-size: 16px;
+}
+
+.sortBar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 18px;
+  align-self: flex-end;
+}
+
+@media (max-width: 768px) {
+  .filterCard {
+    padding: 16px 4vw;
+    margin: 24px 0 18px 0;
+  }
+  .itemsCounter {
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .loading_more {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-20);
+  }
+}
+
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-20);
+  }
+
+  .sidebar {
+    position: static;
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    padding: var(--space-16) 0;
+    gap: var(--space-16);
+  }
+
+  .main {
+    gap: var(--space-16);
+  }
+
+  .loading_more {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-16);
+    margin-top: var(--space-16);
+  }
+}
+
+@media (max-width: 480px) {
+  .loading_more {
+    grid-template-columns: 1fr;
+  }
+}

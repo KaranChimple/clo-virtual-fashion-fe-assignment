@@ -1,52 +1,18 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 
-interface UseInfiniteScrollOptions {
-  threshold?: number;
-  rootMargin?: string;
-  enabled?: boolean;
-}
-
-export const useInfiniteScroll = (
-  onLoadMore: () => void,
-  options: UseInfiniteScrollOptions = {}
-) => {
-  const {
-    threshold = 0.1,
-    rootMargin = '100px',
-    enabled = true,
-  } = options;
-
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-
-  const handleIntersection = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      const [entry] = entries;
-      if (entry.isIntersecting && enabled) {
-        onLoadMore();
-      }
-    },
-    [onLoadMore, enabled]
-  );
+export function useInfiniteScroll(callback: () => void, { enabled = true } = {}) {
+  const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    observerRef.current = new IntersectionObserver(handleIntersection, {
-      threshold,
-      rootMargin,
+    if (!enabled) return;
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) callback();
     });
-
-    const currentSentinel = sentinelRef.current;
-
-    if (currentSentinel) {
-      observerRef.current.observe(currentSentinel);
-    }
-
+    if (ref.current) observer.observe(ref.current);
     return () => {
-      if (observerRef.current && currentSentinel) {
-        observerRef.current.unobserve(currentSentinel);
-      }
+      if (ref.current) observer.unobserve(ref.current);
     };
-  }, [handleIntersection, threshold, rootMargin]);
+  }, [callback, enabled]);
 
-  return sentinelRef;
-};
+  return ref;
+}

@@ -1,168 +1,107 @@
 import { create } from 'zustand';
-import { ContentItem, FilterState, PricingOption, SortOption } from '../types';
-import { contentApi } from '../api';
-import { filterContent, sortContent } from '../utils/filters';
+import { ContentItem, FilterState, SortOption } from 'types';
+import { contentApi } from 'api';
+import { filterContent, sortContent } from 'utils/filters';
 
 interface ContentState {
   allItems: ContentItem[];
   filteredItems: ContentItem[];
-  displayedItems: ContentItem[];
-  
-  currentPage: number;
-  pageSize: number;
-  hasMore: boolean;
-  total: number;
-  
+  shownItems: ContentItem[];
   filters: FilterState;
-  
   isLoading: boolean;
-  isLoadingMore: boolean;
   error: string | null;
-  
+  pageSize: number;
+  displayCount: number;
+  hasMore: boolean;
+  maxPrice: number;
+
   setFilters: (filters: Partial<FilterState>) => void;
   resetFilters: () => void;
-  fetchInitialContent: () => Promise<void>;
-  fetchMoreContent: () => Promise<void>;
+  fetchAllContent: () => Promise<void>;
+  showMore: () => void;
   applyFiltersAndSort: () => void;
-  setKeyword: (keyword: string) => void;
-  setPricing: (pricing: PricingOption[]) => void;
-  setSortBy: (sortBy: SortOption) => void;
-  setPriceRange: (range?: { min: number; max: number }) => void;
 }
-
-const initialFilters: FilterState = {
-  pricing: [],
-  keyword: '',
-  priceRange: undefined,
-  sortBy: SortOption.NEWEST,
-};
 
 export const useContentStore = create<ContentState>((set, get) => ({
   allItems: [],
   filteredItems: [],
-  displayedItems: [],
-  currentPage: 1,
-  pageSize: 20,
-  hasMore: true,
-  total: 0,
-  filters: initialFilters,
+  shownItems: [],
+  filters: {
+    pricing: [],
+    keyword: '',
+    priceRange: undefined,
+    sortBy: SortOption.NAME,
+  },
   isLoading: false,
-  isLoadingMore: false,
   error: null,
+  pageSize: 20,
+  displayCount: 20,
+  hasMore: true,
 
-  setFilters: (partialFilters) => {
+  setFilters: (filters) => {
     set((state) => ({
-      filters: { ...state.filters, ...partialFilters },
+      filters: { ...state.filters, ...filters },
+      displayCount: state.pageSize
     }));
     get().applyFiltersAndSort();
   },
 
+  maxPrice: 999,
+
   resetFilters: () => {
-    set({ filters: initialFilters });
+    set({
+      filters: {
+        pricing: [],
+        keyword: '',
+        priceRange: undefined,
+        sortBy: SortOption.NAME,
+      },
+      displayCount: 20,
+    });
     get().applyFiltersAndSort();
   },
 
-  fetchInitialContent: async () => {
-    set({ isLoading: true, error: null, currentPage: 1 });
-
+  fetchAllContent: async () => {
+    set({ isLoading: true, error: null });
     try {
-      const { pageSize, filters } = get();
-
-      const params = {
-        page: 1,
-        pageSize,
-        pricing: filters.pricing.length > 0 ? filters.pricing : undefined,
-        keyword: filters.keyword || undefined,
-        minPrice: filters.priceRange?.min,
-        maxPrice: filters.priceRange?.max,
-        sortBy: filters.sortBy !== SortOption.NEWEST ? filters.sortBy : undefined,
-      };
-
-      const response = await contentApi.fetchContent(params);
-
+      const items = await contentApi.fetchContent();
+      const prices = items.map(item => item.price);
+      const maxPrice = prices.length > 0 ? Math.max(...prices) : 999;
       set({
-        allItems: response.items,
-        hasMore: response.hasMore,
-        total: response.total,
-        currentPage: response.page,
+        allItems: items,
         isLoading: false,
+        displayCount: 20,
+        maxPrice,
+        filters: {
+          ...get().filters,
+          priceRange: { min: 0, max: maxPrice },
+        },
       });
 
       get().applyFiltersAndSort();
-    } catch (error) {
-      console.error('Error fetching initial content:', error);
-      set({
-        error: error instanceof Error ? error.message : 'Failed to fetch content',
-        isLoading: false,
-      });
+    } catch {
+      set({ error: "Failed to fetch content", isLoading: false, allItems: [], filteredItems: [], shownItems: [] });
     }
   },
 
-  fetchMoreContent: async () => {
-    const { isLoadingMore, hasMore, currentPage, pageSize, filters } = get();
-
-    if (isLoadingMore || !hasMore) return;
-
-    set({ isLoadingMore: true, error: null });
-
-    try {
-      const nextPage = currentPage + 1;
-
-      const params = {
-        page: nextPage,
-        pageSize,
-        pricing: filters.pricing.length > 0 ? filters.pricing : undefined,
-        keyword: filters.keyword || undefined,
-        minPrice: filters.priceRange?.min,
-        maxPrice: filters.priceRange?.max,
-        sortBy: filters.sortBy !== SortOption.NEWEST ? filters.sortBy : undefined,
-      };
-
-      const response = await contentApi.fetchContent(params);
-
-      set((state) => ({
-        allItems: [...state.allItems, ...response.items],
-        currentPage: response.page,
-        hasMore: response.hasMore,
-        isLoadingMore: false,
-      }));
-
-      get().applyFiltersAndSort();
-    } catch (error) {
-      console.error('Error loading more content:', error);
-      set({
-        error: error instanceof Error ? error.message : 'Failed to load more content',
-        isLoadingMore: false,
-      });
-    }
-  },
-
-  applyFiltersAndSort: () => {
-    const { allItems, filters } = get();
-
-    let filtered = filterContent(allItems, filters);
-
-    filtered = sortContent(filtered, filters.sortBy);
-
+  showMore: () => {
+    const { displayCount, pageSize, filteredItems } = get();
+    const newDisplayCount = Math.min(displayCount + pageSize, filteredItems.length);
     set({
-      filteredItems: filtered,
-      displayedItems: filtered,
+      displayCount: newDisplayCount,
+      shownItems: filteredItems.slice(0, newDisplayCount),
+      hasMore: newDisplayCount < filteredItems.length
     });
   },
 
-  setKeyword: (keyword) => {
-    get().setFilters({ keyword });
-  },
-
-  setPricing: (pricing) => {
-    get().setFilters({ pricing });
-  },
-
-  setSortBy: (sortBy) => {
-    get().setFilters({ sortBy });
-  },
-
-  setPriceRange: (priceRange) => {
-    get().setFilters({ priceRange });
+  applyFiltersAndSort: () => {
+    const { allItems, filters, displayCount } = get();
+    let filtered = filterContent(allItems, filters);
+    filtered = sortContent(filtered, filters.sortBy);
+    set({
+      filteredItems: filtered,
+      shownItems: filtered.slice(0, displayCount),
+      hasMore: displayCount < filtered.length,
+    });
   },
 }));

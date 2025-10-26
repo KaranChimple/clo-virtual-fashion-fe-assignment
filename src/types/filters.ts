@@ -6,11 +6,9 @@ export interface PriceRange {
 }
 
 export enum SortOption {
-  NEWEST = 'newest',
-  MOST_LIKED = 'most_liked',
-  MOST_VIEWED = 'most_viewed',
+  NAME = 'name',
   PRICE_LOW_HIGH = 'price_low_high',
-  PRICE_HIGH_LOW = 'price_high_low'
+  PRICE_HIGH_LOW = 'price_high_low',
 }
 
 export interface FilterState {

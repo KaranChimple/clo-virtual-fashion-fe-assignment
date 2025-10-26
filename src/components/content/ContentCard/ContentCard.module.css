@@ -1,0 +1,95 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: #232324;
+  overflow: hidden;
+  height: 100%;
+  box-shadow: 0 2px 16px 0 rgba(34,34,34,0.13);
+  cursor: pointer;
+}
+
+.card__image_wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 110%;
+  background: #18191a;
+  overflow: hidden;
+}
+
+.card__image {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 17px 18px 18px 18px;
+  position: relative;
+  min-height: 94px;
+  justify-content: space-between;
+}
+
+.card__row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.card__textgroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+.card__title {
+  font-size: 1.09rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+  line-height: 1.2;
+  text-align: left;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card__creator {
+  font-size: 0.97rem;
+  color: #b3b6bd;
+  margin-bottom: 0;
+  margin-top: 0;
+  text-align: left;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.card__price {
+  font-size: 1.24rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.7px;
+  text-align: right;
+  margin-top: 11px;
+  margin-bottom: 0;
+  align-self: flex-end;
+}
+
+@media (max-width:900px) {
+  .card__content {
+    padding: 10px 8px 10px 8px;
+    min-height: 82px;
+  }
+  .card__price {
+    font-size: 1.07rem;
+    margin-top: 6px;
+  }
+}

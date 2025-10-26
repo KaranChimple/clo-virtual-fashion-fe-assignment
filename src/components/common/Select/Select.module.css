@@ -1,0 +1,55 @@
+.select {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.select__label {
+  font-size: 1rem;
+  color: #fff;
+  width: 50%;
+}
+
+.select__wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select__input {
+  width: 100%;
+  padding: var(--space-10) var(--space-12);
+  padding-right: var(--space-32);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  cursor: pointer;
+  appearance: none;
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+  font-family: var(--font-family-base);
+  background-image: var(--select-caret-light);
+  background-repeat: no-repeat;
+  background-position: right var(--space-12) center;
+  background-size: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .select__input {
+    background-image: var(--select-caret-dark);
+  }
+}
+
+.select__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.select__input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

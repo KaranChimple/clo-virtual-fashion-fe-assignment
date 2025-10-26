@@ -1,27 +1,21 @@
 export enum PricingOption {
-  PAID = 'PAID',
-  FREE = 'FREE',
-  VIEW_ONLY = 'VIEW_ONLY'
+  PAID = 0,
+  FREE = 1,
+  VIEW_ONLY = 2
 }
 
 export interface ContentItem {
   id: string;
+  creator: string;
   title: string;
-  userName: string;
-  userAvatar?: string;
-  thumbnail: string;
   pricingOption: PricingOption;
-  price?: string;
-  currency?: string;
-  likes?: number;
-  views?: number;
-  createdAt: string;
-  tags?: string[];
-  description?: string;
+  imagePath: string;
+  price: number;
 }
 
 export interface ContentResponse {
   items: ContentItem[];
+  length: number;
   total: number;
   page: number;
   pageSize: number;

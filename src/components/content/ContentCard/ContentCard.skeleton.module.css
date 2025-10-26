@@ -1,0 +1,69 @@
+.skeleton {
+  pointer-events: none;
+}
+
+.skeleton__image {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary) 0%,
+    var(--color-secondary-hover) 50%,
+    var(--color-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton__title {
+  height: 20px;
+  width: 80%;
+  border-radius: var(--radius-sm);
+  background: var(--color-secondary);
+}
+
+.skeleton__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--color-secondary);
+}
+
+.skeleton__text {
+  height: 14px;
+  width: 100px;
+  border-radius: var(--radius-sm);
+  background: var(--color-secondary);
+}
+
+.skeleton__stats {
+  height: 16px;
+  width: 80px;
+  border-radius: var(--radius-sm);
+  background: var(--color-secondary);
+}
+
+.skeleton__price {
+  height: 20px;
+  width: 60px;
+  border-radius: var(--radius-sm);
+  background: var(--color-secondary);
+}
+
+.skeleton__shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary) 0%,
+    var(--color-secondary-hover) 50%,
+    var(--color-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

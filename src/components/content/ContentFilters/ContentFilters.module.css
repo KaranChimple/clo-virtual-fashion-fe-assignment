@@ -1,0 +1,120 @@
+.filters {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-20);
+  background: transparent; 
+  border: none; 
+  box-shadow: none;
+  border-radius: var(--radius-lg);
+  position: sticky;
+  top: calc(80px + var(--space-16));
+  max-height: calc(100vh - 80px - var(--space-32));
+  overflow-y: auto;
+}
+
+.filters__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.filters__section_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.filters__heading {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.filters__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.filters__footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding-top: var(--space-16);
+  border-top: 1px solid var(--color-border);
+}
+
+.filters__count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+  text-align: center;
+}
+
+.filters::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filters::-webkit-scrollbar-track {
+  background: var(--color-secondary);
+  border-radius: var(--radius-full);
+}
+
+.filters::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+.filters::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+@media (max-width: 1024px) {
+  .filters {
+    position: static;
+    max-height: none;
+  }
+}
+
+.inlineRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-top: 16px;
+  margin-bottom: 20px;
+}
+
+.inlineLabel {
+  white-space: nowrap;
+  color: #fff;
+  margin-right: 20px;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.options {
+  display: flex;
+  gap: 20px;
+}
+
+.priceRangeToggle {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.inlineSlider {
+  min-width: 120px;
+  max-width: 210px;
+  margin-left: 12px;
+}
+
+.resetButton {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
