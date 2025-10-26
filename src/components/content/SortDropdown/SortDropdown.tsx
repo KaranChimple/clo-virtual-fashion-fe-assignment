@@ -19,13 +19,18 @@ export const SortDropdown = ({
     onChange(value as SortOption);
   };
 
+  const selectId = "sort-dropdown-select";
+  const labelId = `${selectId}-label`;
+
   return (
     <div className={styles.sortDropdown}>
       <Select
+        id={selectId}
         label="Sort By"
         options={options}
         value={value}
         onChange={handleSortChange}
+        aria-labelledby={labelId}
       />
     </div>
   );

@@ -90,6 +90,7 @@ export const Slider: React.FC<SliderProps> = ({
 
   return (
     <div
+      data-testid="slider-wrapper"
       className={`${styles.sliderRow} ${
         disabled ? styles["slider--disabled"] : ""
       } ${className}`}
@@ -100,6 +101,7 @@ export const Slider: React.FC<SliderProps> = ({
         className={styles.slider__track}
         ref={trackRef}
         onClick={handleTrackClick}
+        data-testid="slider-track"
       >
         <div className={styles.slider__track_bg} />
         <div

@@ -30,7 +30,10 @@ export const Select: React.FC<SelectProps> = ({
   };
 
   return (
-    <div className={`${styles.select} ${className}`}>
+    <div
+      className={`${styles.select} ${className}`}
+      data-testid="select-wrapper"
+    >
       {label && <label className={styles.select__label}>{label}</label>}
       <div className={styles.select__wrapper}>
         <select

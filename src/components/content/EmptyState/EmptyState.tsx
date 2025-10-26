@@ -30,6 +30,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            data-testid="default-svg-icon"
           >
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.35-4.35" />

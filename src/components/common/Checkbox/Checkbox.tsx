@@ -14,7 +14,10 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   ...props
 }) => {
   return (
-    <div className={`${styles.checkbox} ${className}`}>
+    <div
+      className={`${styles.checkbox} ${className}`}
+      data-testid="checkbox-wrapper"
+    >
       <input
         type="checkbox"
         id={id}
